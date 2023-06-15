@@ -97,8 +97,6 @@ class VideoAPIView(APIView):
             context["is_liked"] = is_liked
             context["is_disliked"] = is_disliked
 
-
-
         if request.user.is_authenticated:
             query = History.objects.filter(video=video, user=request.user)
             if query.exists():
