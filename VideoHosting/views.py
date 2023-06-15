@@ -87,13 +87,17 @@ class VideoAPIView(APIView):
             return redirect("/")
         video.views_count += 1
         video.save()
-
         like_count = Reaction.objects.filter(video_id=video.id, like=True).count()
         dislike_count = Reaction.objects.filter(video_id=video.id, dislike=True).count()
-        is_liked = Reaction.objects.filter(video_id=video.id, user=request.user, like=True).exists()
-        is_disliked = Reaction.objects.filter(video_id=video.id, user=request.user, dislike=True).exists()
         context = {"video": video, "like_count": like_count,
-                   "dislike_count": dislike_count, "is_liked": is_liked, "is_disliked": is_disliked}
+                   "dislike_count": dislike_count}
+        if request.user.is_authenticated:
+            is_liked = Reaction.objects.filter(video_id=video.id, user=request.user, like=True).exists()
+            is_disliked = Reaction.objects.filter(video_id=video.id, user=request.user, dislike=True).exists()
+            context["is_liked"] = is_liked
+            context["is_disliked"] = is_disliked
+
+
 
         if request.user.is_authenticated:
             query = History.objects.filter(video=video, user=request.user)
