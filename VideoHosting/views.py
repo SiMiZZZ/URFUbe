@@ -146,6 +146,9 @@ class LikeAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.success(request, ("Ввойдите в профиль"))
+            return redirect("auth/login")
         request_referer = request.META["HTTP_REFERER"]
         video_id = int(request_referer.split("/")[-1])
         reaction = Reaction.objects.filter(video_id=video_id, user=request.user)
@@ -168,6 +171,9 @@ class DislikeAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.success(request, ("Ввойдите в профиль"))
+            return redirect("auth/login")
         request_referer = request.META["HTTP_REFERER"]
         video_id = int(request_referer.split("/")[-1])
         reaction = Reaction.objects.filter(video_id=video_id, user=request.user)
