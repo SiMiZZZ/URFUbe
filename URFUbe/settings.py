@@ -60,15 +60,10 @@ TEMPLATES = [
 WSGI_APPLICATION = "URFUbe.wsgi.application"
 
 
+DATABASE_URL = os.getenv("DATABASE_URL")
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'urfube_db',
-        'USER': 'postgres',
-        'PASSWORD': 'admin',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
+    "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1800),
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -93,7 +88,9 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = "VideoHosting/static/"
+STATIC_URL = "static/"
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
