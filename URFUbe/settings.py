@@ -99,5 +99,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 TIME_ZONE = "Asia/Yekaterinburg"
 
+CSRF_TRUSTED_ORIGINS = ['https://urfube.up.railway.app']
+
 
 
