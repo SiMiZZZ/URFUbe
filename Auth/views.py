@@ -29,8 +29,7 @@ class RegisterAPIView(APIView):
             login(request, user)
             return redirect("../")
         else:
-            print("Всё хуйня давай по новой")
-            print(form.errors)
+            messages.success(request, ("Проблема с данными, введите другие"))
             form = UserCreationForm()
         return render(request, "registration.html", context={"form": form})
 
