@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>История</title>
+</head>
+<body>
+<header>
+     <div class="column">
+        <a href="/"><img class="logo" src="{% static 'img/logo-dj.png'%}"></a>
+    </div>
+    <div class="column">
+        {% if user.is_authenticated %}
+        <a href="/auth/logout">Выйти</a>
+        <a href="/upload">Добавить видео</a>
+        <a href="/history">История просмотров</a>
+        <p>Пользователь: {{ user.username }}</p>
+        {% else %}
+            <a href="/auth/login">Войти</a>
+        {% endif %}
+    </div>
+</header>
+<main class="main history">
+    <h1 class="history__title">История просмотров</h1>
+    <ul class="history__list">
+        {% for video in videos %}
+        <li class="history__item">
+            <div class="history__col">
+                <a href="/video/{{ video.id }}">
+                    <img class="history__preview" style="width: 384px; height: 216px" src={{ video.preview_url }} >
+                </a>
+            </div>
+            <div class="history__col right">
+                <h2 class="history__videoname">{{ video.name }}</h2>
+                <h3 class="history__author">Автор: {{ video.author.username }}</h3>
+                <p>Просмотры: {{ video.views_count }}</p>
+                <p>Дата загрузки: {{ video.created_at|date:"j.m.o G:i" }}</p>
+            </div>
+        </li>
+    {% endfor %}
+    </ul>
+
+</main>
+
+{% if messages %}
+        {%  for message in messages %}
+            <div role="alert">
+                <p>
+                {{ message }}
+                </p>
+            </div>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>

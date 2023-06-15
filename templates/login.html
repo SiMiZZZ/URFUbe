@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>Авторизация</title>
+</head>
+<body>
+<header>
+    <div class="column">
+        <a href="/"><img class="logo" src="{% static 'img/logo-dj.png'%}"></a>
+    </div>
+    <div class="column">
+        {% if user.is_authenticated %}
+        <a href="/auth/logout">Выйти</a>
+        <a href="/upload">Добавить видео</a>
+        <a href="/history">История просмотров</a>
+        <p>Пользователь: {{ user.username }}</p>
+        {% else %}
+            <a href="/auth/login">Войти</a>
+        {% endif %}
+    </div>
+</header>
+<main class="main login">
+    <form class="log-form" method="post">
+    {% csrf_token %}
+        <label for="name">
+            Username
+            <input id="name" type="text" name="username">
+        </label>
+        <label for="password">
+            Password
+            <input id="password" type="password" name="password">
+        </label>
+        <button type="submit" class="btn btn-primary">Принять</button>
+    </form>
+    <div style="text-align: center;">
+        <p>Если у вас нет аккаунта, можете</p>
+        <a href="/auth/register">зарегистрироваться</a>
+    </div>
+</main>
+{% if messages %}
+    <ul class="alert-list">
+        {%  for message in messages %}
+                <div class="alert" role="alert">
+                    <p>
+                    {{ message }}
+                    </p>
+                </div>
+            {% endfor %}
+    </ul>
+{% endif %}
+</body>
+<script type="text/javascript" src="{% static 'scripts/toast.js'%}"></script>
+</html>

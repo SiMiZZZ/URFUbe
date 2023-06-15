@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>URFUBE</title>
+</head>
+<body>
+<header>
+    <div class="column">
+        <a href="/"><img class="logo" src="{% static 'img/logo-dj.png'%}"></a>
+    </div>
+    <div class="column">
+        {% if user.is_authenticated %}
+        <a href="/auth/logout">Выйти</a>
+        <a href="/upload">Добавить видео</a>
+        <a href="/history">История просмотров</a>
+        <p>Пользователь: {{ user.username }}</p>
+        {% else %}
+            <a href="/auth/login">Войти</a>
+        {% endif %}
+    </div>
+</header>
+<main class="main videos">
+    <ul class="videos__list">
+        {% for video in videos %}
+        <li class="videos__item preview">
+            <a href="/video/{{ video.id }}" class="preview__video">
+                <img style="width: 384px; height: 216px" src={{ video.preview_url }} >
+            </a>
+            <p class="preview__name">{{ video.name }}</p>
+            <p class="preview__author">Автор: {{ video.author.username }}</p>
+        </li>
+    {% endfor %}
+    </ul>
+</main>
+{% if messages %}
+    <ul class="alert-list">
+        {%  for message in messages %}
+                <div class="alert" role="alert">
+                    <p>
+                    {{ message }}
+                    </p>
+                </div>
+            {% endfor %}
+    </ul>
+{% endif %}
+</body>
+<script type="text/javascript" src="{% static 'scripts/toast.js'%}"></script>
+</html>

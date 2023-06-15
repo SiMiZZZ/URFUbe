@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>{{ video.name }}</title>
+</head>
+<body>
+<header>
+    <div class="column">
+        <a href="/"><img class="logo" src="{% static 'img/logo-dj.png'%}"></a>
+    </div>
+    <div class="column">
+        {% if user.is_authenticated %}
+        <a href="/auth/logout">Выйти</a>
+        <a href="/upload">Добавить видео</a>
+        <a href="/history">История просмотров</a>
+        <p>Пользователь: {{ user.username }}</p>
+        {% else %}
+            <a href="/auth/login">Войти</a>
+        {% endif %}
+    </div>
+</header>
+<main class="main video">
+    <div class="column-video">
+        <div class="video">
+            <video id="my-video"
+                    controls
+                    preload="auto"
+                    >
+                         <source type="video/mp4" src={{ video.url }}>
+                </video>
+            <h1>{{ video.name }}</h1>
+            <h3>{{ video.author }}</h3>
+            <div class="label-container">
+                <div class="label-container__column">
+                    <p>Просмотры: {{ video.views_count }}</p>
+                    <p>Дата загрузки: {{ video.created_at|date:"j.m.o G:i" }}</p>
+                </div>
+                <div class="label-container__column">
+                    <div>
+                    <form class="reaction__form" action="/like" method="get">
+                        {% if is_liked %}
+                            <button type="submit" class="like"><img src="{% static 'img/liked.png' %}" alt="">{{ like_count }}</button>
+                        {% else %}
+                            <button type="submit" class="like"><img src="{% static 'img/like.png' %}" alt="">{{ like_count }}</button>
+                        {% endif %}
+                    </form>
+                    </div>
+                    <div>
+                    <form class="reaction__form" action="/dislike" method="get">
+                        {% if is_disliked %}
+                            <button class="dislike"><img src="{% static 'img/disliked.png' %}" alt="">{{ dislike_count }}</button>
+                        {% else %}
+                            <button class="dislike"><img src="{% static 'img/dislike.png' %}" alt="">{{ dislike_count }}</button>
+                        {% endif %}
+                    </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="comments">
+            {% if user.is_authenticated %}
+            <div class="comments__form">
+                <form action="/comment" method="post">
+                    {% csrf_token %}
+                    <input name="label" class="comments__input" placeholder="Введите ваш комментарий...">
+                    <button type="submit" class="comments__send">Отправить</button>
+                </form>
+            </div>
+            {% endif %}
+            <p class="comments__title">Комментарии</p>
+            <ul class="comments__list">
+                {% for comment in comments %}
+                <li class="comments__item">
+                    <div class="comments__flex">
+                        <p class="comments__user">{{ comment.user.username }}</p>
+                        <p class="comments_date">{{ comment.created_at|date:"j.m.o G:i" }}</p>
+                    </div>
+                        <p class="comments__comment">{{ comment.text }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="column">
+        <p class="video__header">Другие видео</p>
+        <ul class="video__list">
+            {% for video in videos %}
+            <li class="video__item preview">
+                <a href="/video/{{ video.id }}" class="preview__video">
+                    <img style="width: 384px; height: 216px" src={{ video.preview_url }} >
+                </a>
+                <p class="preview__name">{{ video.name }}</p>
+                <p class="preview__author">Автор: {{ video.author.username }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</main>
+{% if messages %}
+        {%  for message in messages %}
+            <div role="alert">
+                <p>
+                {{ message }}
+                </p>
+            </div>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>

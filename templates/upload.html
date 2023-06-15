@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>Title</title>
+</head>
+<body>
+<header>
+    <div class="column">
+        <a href="/"><img class="logo" src="{% static 'img/logo-dj.png'%}"></a>
+    </div>
+    <div class="column">
+        {% if user.is_authenticated %}
+        <a href="/auth/logout">Выйти</a>
+        <a href="/upload">Добавить видео</a>
+        <a href="/history">История просмотров</a>
+        <p>Пользователь: {{ user.username }}</p>
+        {% else %}
+            <a href="/auth/login">Войти</a>
+        {% endif %}
+    </div>
+</header>
+<main class="main upload">
+    <h1 class="upload__title" style="text-align: center;">Загрузить видео</h1>
+    <form action="/upload" class="upload__form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="video_name">
+            Название видео
+            <input id="video_name" name="video_name" type="text" placeholder="Название видео" required>
+        </label>
+        <label for="video_file">
+            Прикрепите файл
+            <input type="file" id="video_file" name="video_file" accept="video/*" required>
+        </label>
+        <label for="preview">
+            Загрузите превью
+            <input type="file" id="preview" name="preview" accept="image/*">
+        </label>
+        <button id="upload" class="video" type="submit" disabled="">Отправить</button>
+    </form>
+</main>
+</body>
+<script type="text/javascript" src={% static "scripts/upload.js" %}></script>
+</html>

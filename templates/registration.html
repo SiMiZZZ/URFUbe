@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>Title</title>
+</head>
+<body>
+<header>
+    <div class="column">
+        <a href="/"><img class="logo" src="{% static 'img/logo-dj.png'%}"></a>
+    </div>
+    <div class="column">
+        {% if user.is_authenticated %}
+        <a href="/auth/logout">Выйти</a>
+        <a href="/upload">Добавить видео</a>
+        <a href="/history">История просмотров</a>
+        <p>Пользователь: {{ user.username }}</p>
+        {% else %}
+            <a href="/auth/login">Войти</a>
+        {% endif %}
+    </div>
+</header>
+<main class="main registration">
+{% block content %}
+    {%  if form.errors %}
+        <div class="alert-message" role="alert">
+            <p class="error">Что-то не так с вашей формой регистрации</p>
+        </div>
+    {% endif %}
+    <form class="reg-form" method="post" action="register">
+    {% csrf_token %}
+        <h1 style="text-align: center;">Регистрация пользователя</h1>
+        <div class="registration__form">
+            <div class="registration__field">
+                <p class="registration__subtitle">Имя пользователя</p>
+                {{ form.username }}
+            </div>
+            <div class="registration__field">
+                <p class="registration__subtitle">Пароль</p>
+                {{ form.password1 }}
+            </div>
+            <div class="registration__field">
+                <p class="registration__subtitle">Повторите пароль</p>
+                {{ form.password2 }}
+            </div>
+            <button type="submit" class="btn btn-primary">Зарегестрироваться</button>
+        </div>
+    </form>
+    {% endblock %}
+</main>
+</body>
+</html>
