@@ -39,24 +39,45 @@
                     <p>Дата загрузки: {{ video.created_at|date:"j.m.o G:i" }}</p>
                 </div>
                 <div class="label-container__column">
-                    <div>
-                    <form class="reaction__form" action="/like" method="get">
-                        {% if is_liked %}
-                            <button type="submit" class="like"><img src="{% static 'img/liked.png' %}" alt="">{{ like_count }}</button>
-                        {% else %}
-                            <button type="submit" class="like"><img src="{% static 'img/like.png' %}" alt="">{{ like_count }}</button>
-                        {% endif %}
-                    </form>
-                    </div>
-                    <div>
-                    <form class="reaction__form" action="/dislike" method="get">
-                        {% if is_disliked %}
-                            <button class="dislike"><img src="{% static 'img/disliked.png' %}" alt="">{{ dislike_count }}</button>
-                        {% else %}
-                            <button class="dislike"><img src="{% static 'img/dislike.png' %}" alt="">{{ dislike_count }}</button>
-                        {% endif %}
-                    </form>
-                    </div>
+                    {% if user.is_authenticated %}
+                        <div>
+                        <form class="reaction__form" action="/like" method="get">
+                            {% if is_liked %}
+                                <button type="submit" class="like"><img src="{% static 'img/liked.png' %}" alt="">{{ like_count }}</button>
+                            {% else %}
+                                <button type="submit" class="like"><img src="{% static 'img/like.png' %}" alt="">{{ like_count }}</button>
+                            {% endif %}
+                        </form>
+                        </div>
+                        <div>
+                        <form class="reaction__form" action="/dislike" method="get">
+                            {% if is_disliked %}
+                                <button class="dislike"><img src="{% static 'img/disliked.png' %}" alt="">{{ dislike_count }}</button>
+                            {% else %}
+                                <button class="dislike"><img src="{% static 'img/dislike.png' %}" alt="">{{ dislike_count }}</button>
+                            {% endif %}
+                        </form>
+                        </div>
+                    {% else %}
+                        <div>
+                        <form class="reaction__form" action="/auth/login" method="get">
+                            {% if is_liked %}
+                                <button type="submit" class="like"><img src="{% static 'img/liked.png' %}" alt="">{{ like_count }}</button>
+                            {% else %}
+                                <button type="submit" class="like"><img src="{% static 'img/like.png' %}" alt="">{{ like_count }}</button>
+                            {% endif %}
+                        </form>
+                        </div>
+                        <div>
+                        <form class="reaction__form" action="/auth/login" method="get">
+                            {% if is_disliked %}
+                                <button class="dislike"><img src="{% static 'img/disliked.png' %}" alt="">{{ dislike_count }}</button>
+                            {% else %}
+                                <button class="dislike"><img src="{% static 'img/dislike.png' %}" alt="">{{ dislike_count }}</button>
+                            {% endif %}
+                        </form>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
